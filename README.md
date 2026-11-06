@@ -13,9 +13,10 @@ The instructions focus on the ARO **Server Node** package. This is different fro
 - [3. Prepare Debian](#3-prepare-debian)
 - [4. Install the ARO Server Node](#4-install-the-aro-server-node)
 - [5. Check That the Node Is Running](#5-check-that-the-node-is-running)
-- [6. Useful Commands](#6-useful-commands)
-- [7. Troubleshooting](#7-troubleshooting)
-- [8. Official Resources](#8-official-resources)
+- [6. Connect to the ARO Dashboard](#6-connect-to-the-aro-dashboard)
+- [7. Useful Commands](#7-useful-commands)
+- [8. Troubleshooting](#8-troubleshooting)
+- [9. Official Resources](#9-official-resources)
 
 ## 1. What You Need
 
@@ -114,7 +115,21 @@ If the service name is different on your installation, list ARO-related services
 systemctl list-units --type=service --all | grep -i aro
 ```
 
-## 6. Useful Commands
+## 6. Connect to the ARO Dashboard
+
+The ARO Dashboard is used to manage your ARO nodes and view your Jade rewards.
+
+1. Open the [ARO Dashboard](https://dashboard.aro.network/).
+2. Create an ARO account or sign in to your existing account.
+3. Open the **ARO Node** section to view nodes linked to your account.
+4. To add a Server Node, use **Add New Node** and select the **ARO Server** option if it is shown.
+5. Follow the Server-specific setup instructions displayed by the Dashboard.
+
+**Important:** The ARO Desktop, ARO Lite, and ARO Mobile guides describe their own Serial Number (SN) binding processes. Do not use those instructions or assume their SN commands apply to the ARO Server package. Follow the ARO Server flow shown in the Dashboard and its official installation guide.
+
+This community guide currently documents the Debian package installation and Linux service checks. The exact Server Node account-binding or SN retrieval steps should be added only after they have been verified on a real ARO Server installation.
+
+## 7. Useful Commands
 
 | Task | Command |
 | --- | --- |
@@ -124,7 +139,7 @@ systemctl list-units --type=service --all | grep -i aro
 | List ARO-related services | `systemctl list-units --type=service --all \| grep -i aro` |
 | Check installed ARO package | `dpkg -l \| grep -i aro` |
 
-## 7. Troubleshooting
+## 8. Troubleshooting
 
 ### The installation says root access is required
 
@@ -151,12 +166,15 @@ sudo systemctl status agent --no-pager
 sudo journalctl -u agent -n 100 --no-pager
 ```
 
-For more help, see the official [ARO Server FAQ & Troubleshooting](https://docs.aro.network/node-operator-guide/aro-server/aro-server-faq-troubleshooting/).
+### The node cannot connect to the ARO network
 
-## 8. Official Resources
+Check your firewall and router settings against the port requirements in the official [ARO Server FAQ & Troubleshooting](https://docs.aro.network/node-operator-guide/aro-server/aro-server-faq-troubleshooting/). Do not open ports unless you understand your network's security settings.
+
+## 9. Official Resources
 
 - [ARO Server Installation Guide](https://docs.aro.network/node-operator-guide/aro-server/aro-server-installation-guide/)
 - [ARO Server FAQ & Troubleshooting](https://docs.aro.network/node-operator-guide/aro-server/aro-server-faq-troubleshooting/)
+- [ARO Dashboard Guide](https://docs.aro.network/node-operator-guide/become-operator/aro-dashboard/)
 - [ARO Network Website](https://aro.network/)
 - [Debian 13 Installation Video](https://youtu.be/PAWzoDgVgyY?si=gfKclgjcxKOjSUlo)
 
