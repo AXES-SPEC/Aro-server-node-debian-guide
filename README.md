@@ -14,9 +14,10 @@ The instructions focus on the ARO **Server Node** package. This is different fro
 - [4. Install the ARO Server Node](#4-install-the-aro-server-node)
 - [5. Check That the Node Is Running](#5-check-that-the-node-is-running)
 - [6. Connect the Server to the ARO Dashboard](#6-connect-the-server-to-the-aro-dashboard)
-- [7. Useful Commands](#7-useful-commands)
-- [8. Troubleshooting](#8-troubleshooting)
-- [9. Official Resources](#9-official-resources)
+- [7. Screenshots](#7-screenshots)
+- [8. Useful Commands](#8-useful-commands)
+- [9. Troubleshooting](#9-troubleshooting)
+- [10. Official Resources](#10-official-resources)
 
 ## 1. What You Need
 
@@ -124,7 +125,29 @@ If the file does not exist on your installation, do not guess another Serial Num
 
 > The Serial Number command above is for the ARO Server setup described in this guide. Do not substitute instructions for ARO Desktop, ARO Lite, or ARO Mobile.
 
-## 7. Useful Commands
+## 7. Screenshots
+
+The following screenshots show the installation, service verification, and Dashboard registration screens in order.
+
+### Step 1: Download and install the ARO package
+
+The first screenshot shows the package download and installation. If APT reports that the package is already the newest version, proceed to the service check.
+
+![ARO package download and installation](<Screenshot From 2026-11-06 18-02-15.png>)
+
+### Step 2: Confirm that the ARO agent is running
+
+Run `sudo systemctl status agent --no-pager`. Confirm that the output includes **Active: active (running)**.
+
+![ARO agent service running](<Screenshot From 2026-11-06 18-03-29.png>)
+
+### Step 3: Open the Server registration page
+
+In the Dashboard, select **ARO Nodes → Add New Node → Server**. The page asks for the device Serial Number. Retrieve it on Debian using the command in Section 6.
+
+![ARO Dashboard Server registration](<Screenshot From 2026-11-06 18-05-15.png>)
+
+## 8. Useful Commands
 
 | Task | Command |
 | --- | --- |
@@ -136,7 +159,7 @@ If the file does not exist on your installation, do not guess another Serial Num
 | Read the Server Serial Number | `sudo cat /etc/enreach/x86_sn` |
 | Check installed ARO package | `dpkg -l | grep -i aro` |
 
-## 8. Troubleshooting
+## 9. Troubleshooting
 
 ### The installation says root access is required
 
@@ -179,7 +202,7 @@ Check the official ARO Server documentation or contact ARO support. Do not enter
 
 Check your firewall and router settings against the port requirements in the official [ARO Server FAQ & Troubleshooting](https://docs.aro.network/node-operator-guide/aro-server/aro-server-faq-troubleshooting/). Do not open ports unless you understand your network's security settings.
 
-## 9. Official Resources
+## 10. Official Resources
 
 - [ARO Server Installation Guide](https://docs.aro.network/node-operator-guide/aro-server/aro-server-installation-guide/)
 - [ARO Server FAQ & Troubleshooting](https://docs.aro.network/node-operator-guide/aro-server/aro-server-faq-troubleshooting/)
