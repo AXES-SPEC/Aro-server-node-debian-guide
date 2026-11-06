@@ -13,7 +13,7 @@ The instructions focus on the ARO **Server Node** package. This is different fro
 - [3. Prepare Debian](#3-prepare-debian)
 - [4. Install the ARO Server Node](#4-install-the-aro-server-node)
 - [5. Check That the Node Is Running](#5-check-that-the-node-is-running)
-- [6. Connect to the ARO Dashboard](#6-connect-to-the-aro-dashboard)
+- [6. Connect the Server to the ARO Dashboard](#6-connect-the-server-to-the-aro-dashboard)
 - [7. Useful Commands](#7-useful-commands)
 - [8. Troubleshooting](#8-troubleshooting)
 - [9. Official Resources](#9-official-resources)
@@ -44,7 +44,7 @@ Complete the Debian installation and connect your computer to the internet.
 
 Open the Terminal.
 
-First, update the package list and install available updates:
+Update the package list and install available updates:
 
 ```bash
 sudo apt update
@@ -53,21 +53,7 @@ sudo apt upgrade -y
 
 Enter your password if prompted.
 
-Next, switch to the root account:
-
-```bash
-sudo -i
-```
-
-Your terminal prompt should now indicate that you are logged in as root. The remaining installation commands in this guide are run as root.
-
 ## 4. Install the ARO Server Node
-
-Update the package list as root:
-
-```bash
-apt update
-```
 
 Download the official ARO Server DEB package:
 
@@ -75,21 +61,19 @@ Download the official ARO Server DEB package:
 wget -O /tmp/aro-client-1.0.0.deb https://download.aro.network/files/deb/aro-client-1.0.0.deb
 ```
 
-Install the package:
+Install the package using administrator privileges:
 
 ```bash
-apt install -f /tmp/aro-client-1.0.0.deb
+sudo apt install -f /tmp/aro-client-1.0.0.deb
 ```
 
 If the installer asks you to confirm, type `Y` and press **Enter**.
 
 Wait for the installation to finish. Do not close the terminal while the installation is running.
 
-When installation is complete, you can leave the root shell:
+**Important:** Do not run `apt install` without `sudo` or root access. If you see a message saying it cannot open the dpkg lock or asks whether you are root, repeat the installation command with `sudo`.
 
-```bash
-exit
-```
+If the installer reports that `aro` is already the newest version, the package is already installed. Continue to the service check below.
 
 ## 5. Check That the Node Is Running
 
@@ -99,7 +83,7 @@ Check the ARO agent service:
 sudo systemctl status agent --no-pager
 ```
 
-Look for **Active: active (running)** in the output.
+Look for **Active: active (running)** in the output. This confirms that the agent service is running on your computer.
 
 To watch the live service logs:
 
@@ -115,38 +99,59 @@ If the service name is different on your installation, list ARO-related services
 systemctl list-units --type=service --all | grep -i aro
 ```
 
-## 6. Connect to the ARO Dashboard
+## 6. Connect the Server to the ARO Dashboard
 
-The ARO Dashboard is used to manage your ARO nodes and view your Jade rewards.
+After confirming that the ARO agent is running, link your server to your ARO account.
 
 1. Open the [ARO Dashboard](https://dashboard.aro.network/).
-2. Create an ARO account or sign in to your existing account.
-3. Open the **ARO Node** section to view nodes linked to your account.
-4. To add a Server Node, use **Add New Node** and select the **ARO Server** option if it is shown.
-5. Follow the Server-specific setup instructions displayed by the Dashboard.
+2. Sign in to your account.
+3. Select **ARO Nodes**.
+4. Select **Add New Node**, then choose **Server**.
+5. The page displays **Step 1: Connect your device** and asks for the device's Serial Number (SN).
+6. On the Debian computer running the ARO Server Node, run:
 
-**Important:** The ARO Desktop, ARO Lite, and ARO Mobile guides describe their own Serial Number (SN) binding processes. Do not use those instructions or assume their SN commands apply to the ARO Server package. Follow the ARO Server flow shown in the Dashboard and its official installation guide.
+```bash
+sudo cat /etc/enreach/x86_sn
+```
 
-This community guide currently documents the Debian package installation and Linux service checks. The exact Server Node account-binding or SN retrieval steps should be added only after they have been verified on a real ARO Server installation.
+7. Copy the Serial Number shown in the terminal.
+8. Paste it into the Serial Number field on the Dashboard and select **Continue**.
+9. Follow any remaining instructions displayed by the Dashboard to complete linking.
+
+**Keep your Serial Number private.** Do not post it in public screenshots, GitHub issues, Discord, or social media. Redact the value before sharing terminal screenshots.
+
+If the file does not exist on your installation, do not guess another Serial Number. Check the official [ARO Server Installation Guide](https://docs.aro.network/node-operator-guide/aro-server/aro-server-installation-guide/) or contact ARO support for the current method.
+
+> The Serial Number command above is for the ARO Server setup described in this guide. Do not substitute instructions for ARO Desktop, ARO Lite, or ARO Mobile.
 
 ## 7. Useful Commands
 
 | Task | Command |
 | --- | --- |
+| Update Debian package list | `sudo apt update` |
+| Install or repair ARO package | `sudo apt install -f /tmp/aro-client-1.0.0.deb` |
 | Check agent status | `sudo systemctl status agent --no-pager` |
 | Restart the agent | `sudo systemctl restart agent` |
 | View live agent logs | `sudo journalctl -u agent -f` |
-| List ARO-related services | `systemctl list-units --type=service --all \| grep -i aro` |
-| Check installed ARO package | `dpkg -l \| grep -i aro` |
+| Read the Server Serial Number | `sudo cat /etc/enreach/x86_sn` |
+| Check installed ARO package | `dpkg -l | grep -i aro` |
 
 ## 8. Troubleshooting
 
 ### The installation says root access is required
 
-Switch to the root account before running the installation commands:
+Use `sudo` before the package installation command:
 
 ```bash
-sudo -i
+sudo apt install -f /tmp/aro-client-1.0.0.deb
+```
+
+### The package is already installed
+
+If APT reports that `aro` is already the newest version, do not reinstall it unnecessarily. Check the service:
+
+```bash
+sudo systemctl status agent --no-pager
 ```
 
 ### The node appears offline after Debian goes to sleep
@@ -159,12 +164,16 @@ Make sure the computer has an internet connection and allow time for the agent's
 
 ### The agent service is not running
 
-Check its status and logs:
+Check its status and recent logs:
 
 ```bash
 sudo systemctl status agent --no-pager
 sudo journalctl -u agent -n 100 --no-pager
 ```
+
+### The Serial Number file cannot be found
+
+Check the official ARO Server documentation or contact ARO support. Do not enter a Serial Number from another device.
 
 ### The node cannot connect to the ARO network
 
