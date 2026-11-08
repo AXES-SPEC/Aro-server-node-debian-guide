@@ -135,9 +135,7 @@ Replace `YOUR-MAIN-IP` with the IP address from Step 6. For example, if the comm
 
 **Keep your Serial Number private.** Do not post it in public screenshots, GitHub issues, Discord, or social media. Redact the value before sharing terminal screenshots.
 
-If the file does not exist on your installation, do not guess another Serial Number. Check the official [ARO Server Installation Guide](https://docs.aro.network/node-operator-guide/aro-server/aro-server-installation-guide/) or contact ARO support for the current method.
-
-> The Serial Number command above is for the ARO Server setup described in this guide. Do not substitute instructions for ARO Desktop, ARO Lite, or ARO Mobile.
+> These instructions are for the ARO Server setup described in this guide. Do not substitute instructions for ARO Desktop, ARO Lite, or ARO Mobile. If the local console does not open or does not display a Serial Number, consult the official [ARO Server Installation Guide](https://docs.aro.network/node-operator-guide/aro-server/aro-server-installation-guide/) or contact ARO support.
 
 ## 7. Screenshots
 
@@ -170,7 +168,7 @@ In the Dashboard, select **ARO Nodes → Add New Node → Server**. The page ask
 | Check agent status | `sudo systemctl status agent --no-pager` |
 | Restart the agent | `sudo systemctl restart agent` |
 | View live agent logs | `sudo journalctl -u agent -f` |
-| Find the server's main local IP | `ip route get 1.1.1.1 | awk '{for(i=1;i<=NF;i++) if($i=="src"){print $(i+1); exit}}'` |
+| Find the server's main local IP | `ip route get 1.1.1.1 \| awk '{for(i=1;i<=NF;i++) if($i=="src"){print $(i+1); exit}}'` |
 | Open the local ARO console | `http://YOUR-MAIN-IP:40001` (in a browser) |
 | Check installed ARO package | `dpkg -l | grep -i aro` |
 
