@@ -109,15 +109,29 @@ After confirming that the ARO agent is running, link your server to your ARO acc
 3. Select **ARO Nodes**.
 4. Select **Add New Node**, then choose **Server**.
 5. The page displays **Step 1: Connect your device** and asks for the device's Serial Number (SN).
-6. On the Debian computer running the ARO Server Node, run:
+6. On the Debian computer running the ARO Server Node, open the Terminal and run this command to find the server's **main local IP address**:
 
 ```bash
-sudo cat /etc/enreach/x86_sn
+ip route get 1.1.1.1 | awk '{for(i=1;i<=NF;i++) if($i=="src"){print $(i+1); exit}}'
 ```
 
-7. Copy the Serial Number shown in the terminal.
-8. Paste it into the Serial Number field on the Dashboard and select **Continue**.
-9. Follow any remaining instructions displayed by the Dashboard to complete linking.
+7. The command prints an IP address (for example, `192.168.1.25`). This is the main local IP used by the computer to reach the internet. Use the actual address printed on your own server; do not copy the example.
+
+8. On a device connected to the same local network, open a web browser and visit:
+
+```text
+http://YOUR-MAIN-IP:40001
+```
+
+Replace `YOUR-MAIN-IP` with the IP address from Step 6. For example, if the command returned `192.168.1.25`, open `http://192.168.1.25:40001`.
+
+9. The ARO local web console should open. Find and copy the **19-digit Serial Number** displayed there. Use the Serial Number shown by this server's own console.
+
+10. Return to the ARO Dashboard, paste the 19-digit Serial Number into the Serial Number field, and select **Continue**.
+
+11. Follow any remaining instructions displayed by the Dashboard to complete linking.
+
+**Important:** Use the IP address of the computer running this ARO Server Node, and make sure the browser device can reach it on the same network. The IP address itself is not the Serial Number; it is used to open the local ARO web console where the correct Serial Number is displayed.
 
 **Keep your Serial Number private.** Do not post it in public screenshots, GitHub issues, Discord, or social media. Redact the value before sharing terminal screenshots.
 
@@ -127,7 +141,7 @@ If the file does not exist on your installation, do not guess another Serial Num
 
 ## 7. Screenshots
 
-The following screenshots show the installation, service verification, and Dashboard registration screens in order.
+The following screenshots show the installation, service verification, and Dashboard registration screens in order. The Serial Number retrieval steps have been updated to use the server's main local IP and the ARO local web console at port 40001.
 
 ### Step 1: Download and install the ARO package
 
@@ -156,7 +170,8 @@ In the Dashboard, select **ARO Nodes → Add New Node → Server**. The page ask
 | Check agent status | `sudo systemctl status agent --no-pager` |
 | Restart the agent | `sudo systemctl restart agent` |
 | View live agent logs | `sudo journalctl -u agent -f` |
-| Read the Server Serial Number | `sudo cat /etc/enreach/x86_sn` |
+| Find the server's main local IP | `ip route get 1.1.1.1 | awk '{for(i=1;i<=NF;i++) if($i=="src"){print $(i+1); exit}}'` |
+| Open the local ARO console | `http://YOUR-MAIN-IP:40001` (in a browser) |
 | Check installed ARO package | `dpkg -l | grep -i aro` |
 
 ## 9. Troubleshooting
@@ -194,9 +209,16 @@ sudo systemctl status agent --no-pager
 sudo journalctl -u agent -n 100 --no-pager
 ```
 
-### The Serial Number file cannot be found
+### I cannot find the correct Serial Number or the Dashboard rejects it
 
-Check the official ARO Server documentation or contact ARO support. Do not enter a Serial Number from another device.
+Do not rely on the old `sudo cat /etc/enreach/x86_sn` file method for this registration step. Instead:
+
+1. Run the main-IP command from Section 6.
+2. Open `http://YOUR-MAIN-IP:40001` in a browser on the same local network.
+3. Copy the 19-digit Serial Number displayed in that server's ARO local web console.
+4. Enter that Serial Number in the Dashboard.
+
+If the local console does not load, confirm that the ARO agent is running and that you used the server's current main local IP. Do not use the IP address itself as the Serial Number, and do not enter a Serial Number from another device.
 
 ### The node cannot connect to the ARO network
 
